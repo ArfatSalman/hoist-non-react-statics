@@ -1,15 +1,14 @@
 /*globals describe,it,beforeEach */
-"use strict";
+import { expect } from 'chai';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import hoistNonReactStatics from '../../index';
 
-var expect = require('chai').expect;
-var React = require('react');
-var createReactClass = require('create-react-class');
-var hoistNonReactStatics = require('../../index');
 
 describe('hoist-non-react-statics', function () {
 
     it('should hoist non react statics', function () {
-        var Component = createReactClass({
+        const Component = createReactClass({
             displayName: 'Foo',
             statics: {
                 foo: 'bar'
@@ -19,7 +18,7 @@ describe('hoist-non-react-statics', function () {
             }
         });
 
-        var Wrapper = createReactClass({
+        const Wrapper = createReactClass({
             displayName: 'Bar',
             render: function () {
                 return <Component />;
@@ -33,7 +32,7 @@ describe('hoist-non-react-statics', function () {
     });
 
     it('should not hoist custom statics', function () {
-        var Component = createReactClass({
+        const Component = createReactClass({
             displayName: 'Foo',
             statics: {
                 foo: 'bar'
@@ -43,7 +42,7 @@ describe('hoist-non-react-statics', function () {
             }
         });
 
-        var Wrapper = createReactClass({
+        const Wrapper = createReactClass({
             displayName: 'Bar',
             render: function () {
                 return <Component />;
@@ -55,8 +54,8 @@ describe('hoist-non-react-statics', function () {
     });
 
     it('should not hoist statics from strings', function() {
-        var Component = 'input';
-        var Wrapper = createReactClass({
+        const Component = 'input';
+        const Wrapper = createReactClass({
             render: function() {
                 return <Component />;
             }
@@ -67,9 +66,9 @@ describe('hoist-non-react-statics', function () {
     });
 
     it('should hoist symbols', function() {
-        var foo = Symbol('foo');
+        const foo = Symbol('foo');
 
-        var Component = createReactClass({
+        const Component = createReactClass({
             render: function() {
                 return null;
             }
@@ -79,7 +78,7 @@ describe('hoist-non-react-statics', function () {
         // since createReactClass doesn't handle symbols passed to static
         Component[foo] = 'bar';
 
-        var Wrapper = createReactClass({
+        const Wrapper = createReactClass({
             render: function() {
                 return <Component />;
             }
@@ -98,7 +97,7 @@ describe('hoist-non-react-statics', function () {
             }
         }
 
-        var Wrapper = createReactClass({
+        const Wrapper = createReactClass({
             render: function() {
                 return <Component />;
             }
@@ -111,7 +110,7 @@ describe('hoist-non-react-statics', function () {
     });
 
     it('should hoist properties with accessor methods', function() {
-        var Component = createReactClass({
+        const Component = createReactClass({
             render: function() {
                 return null;
             }
@@ -119,7 +118,7 @@ describe('hoist-non-react-statics', function () {
 
         // Manually set static complex property
         // since createReactClass doesn't handle properties passed to static
-        var counter = 0;
+        let counter = 0;
         Object.defineProperty(Component, 'foo', {
             enumerable: true,
             configurable: true,
@@ -128,7 +127,7 @@ describe('hoist-non-react-statics', function () {
             }
         });
 
-        var Wrapper = createReactClass({
+        const Wrapper = createReactClass({
             render: function() {
                 return <Component />;
             }
